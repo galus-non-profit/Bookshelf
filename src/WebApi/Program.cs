@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Host.ConfigureLogging(loggingBuilder => loggingBuilder.AddSeq(apiKey: "BwG5tK11R4G9jAnuoldS"));
+builder.Logging.AddSeq(builder.Configuration.GetSection("Seq"));
 
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure();
@@ -35,4 +35,4 @@ app.MapPost("/weatherforecast", async (IMediator mediator, [FromBody] GetWeather
 .WithName("GetWeatherForecast")
 .WithOpenApi();
 
-app.Run();
+await app.RunAsync();

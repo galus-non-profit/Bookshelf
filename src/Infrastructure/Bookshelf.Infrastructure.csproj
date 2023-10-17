@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="MediatR" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\Application\Bookshelf.Application.csproj" />
   </ItemGroup>
 

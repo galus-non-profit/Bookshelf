@@ -3,7 +3,6 @@ namespace Bookshelf.Infrastructure.QueryHandlers;
 using Bookshelf.Application.Queries;
 using Bookshelf.Application.ViewModels;
 using FluentValidation;
-using MediatR;
 
 internal sealed class GetWeatherForecastsHandler : IRequestHandler<GetWeatherForecasts, IList<WeatherForecast>>
 {
