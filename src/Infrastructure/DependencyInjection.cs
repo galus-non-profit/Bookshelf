@@ -1,5 +1,6 @@
 namespace Bookshelf.Infrastructure;
 
+using Bookshelf.Infrastructure.SqlServer;
 using Microsoft.Extensions.DependencyInjection;
 
 public static class DependencyInjection
@@ -8,6 +9,8 @@ public static class DependencyInjection
     {
         var assembly = System.Reflection.Assembly.GetExecutingAssembly();
         services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(assembly));
+
+        services.AddSqlServer();
 
         return services;
     }

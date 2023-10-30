@@ -22,10 +22,19 @@ internal sealed class GetWeatherForecastsHandler : IRequestHandler<GetWeatherFor
             var errors = string.Join(Environment.NewLine, validationResult.Errors);
             throw new Exception(errors);
         }
-
+        
         var summaries = new[]
         {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
+            "Freezing",
+            "Bracing",
+            "Chilly",
+            "Cool",
+            "Mild",
+            "Warm",
+            "Balmy",
+            "Hot",
+            "Sweltering",
+            "Scorching",
         };
 
         var forecast = Enumerable.Range(1, request.Count).Select(index =>

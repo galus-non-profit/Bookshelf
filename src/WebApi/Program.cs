@@ -1,4 +1,5 @@
 using Bookshelf.Application;
+using Bookshelf.Application.Commands;
 using Bookshelf.Application.Queries;
 using Bookshelf.Infrastructure;
 using MediatR;
@@ -31,8 +32,16 @@ app.UseHttpsRedirection();
 // .WithName("GetWeatherForecast")
 // .WithOpenApi();
 
-app.MapPost("/weatherforecast", async (IMediator mediator, [FromBody] GetWeatherForecasts query) => await mediator.Send(query))
+app.MapPost("/weatherforecast", async ([FromServices] ISender mediator, [FromBody] GetWeatherForecasts query, CancellationToken cancellationToken) => await mediator.Send(query, cancellationToken))
 .WithName("GetWeatherForecast")
+.WithOpenApi();
+
+app.MapPost("/books", async ([FromServices] ISender mediator, [FromBody] AddBook command, CancellationToken cancellationToken) => await mediator.Send(command, cancellationToken))
+.WithName("AddBook")
+.WithOpenApi();
+
+app.MapGet("/books", async (IMediator mediator, CancellationToken cancellationToken) => await mediator.Send(new GetBooks { }, cancellationToken))
+.WithName("GetBooks")
 .WithOpenApi();
 
 await app.RunAsync();
