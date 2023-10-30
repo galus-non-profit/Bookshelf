@@ -63,8 +63,8 @@ public sealed class Book
     }
 
     public BookId Id { get; private set; }
-    public string Title { get; private set; }
-    public string Authors { get; private set; }
-    public string Publisher { get; private set; }
+    public string? Title { get; private set; }
+    public string? Authors { get; private set; }
+    public string? Publisher { get; private set; }
     public ISBN? ISBN { get; private set; }
 }
