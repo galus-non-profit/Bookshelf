@@ -1,6 +1,43 @@
-@Bookshelf.WebApi_HostAddress = http://localhost:5097
+﻿@HostAddress = http://localhost:5080
 
-GET {{Bookshelf.WebApi_HostAddress}}/weatherforecast/
-Accept: application/json
+POST {{HostAddress}}/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "id": "2ae0dc33-80ae-46dc-b015-1f093f55e2ea",
+  "title": "Czysty kod. Podręcznik dobrego programisty",
+  "authors": "Robert C. Martin",
+  "publisher": "Helion",
+  "isbn": "9788383223452"
+}
 
 ###
+
+POST {{HostAddress}}/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "id": "4bed65e5-5d95-4849-85d0-bdf1e44a58d3",
+  "title": "Kod. Ukryty język komputerów",
+  "authors": "Charles Petzold",
+  "publisher": "Helion",
+  "isbn": "9788328379138"
+}
+
+###
+
+POST {{HostAddress}}/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "id": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "title": "Kod. Ukryty język komputerów. Wydanie II",
+  "authors": "Charles Petzold",
+  "publisher": "Helion",
+  "isbn": "9788383221694"
+}
+
+###
+
+GET {{HostAddress}}/books HTTP/1.1
+Accept: application/json
