@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Logging.AddSeq(builder.Configuration.GetSection("Seq"));
 
 builder.Services.AddApplication();
-builder.Services.AddInfrastructure();
+builder.Services.AddInfrastructure(builder.Configuration);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
