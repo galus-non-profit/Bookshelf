@@ -40,8 +40,17 @@ app.MapPost("/books", async ([FromServices] ISender mediator, [FromBody] AddBook
 .WithName("AddBook")
 .WithOpenApi();
 
+app.MapPut("/books", async ([FromServices] ISender mediator, [FromBody] UpdateBook command, CancellationToken cancellationToken) => await mediator.Send(command, cancellationToken))
+.WithName("UpdateBook")
+.WithOpenApi();
+
+app.MapDelete("/books", async ([FromServices] ISender mediator, [FromBody] DeleteBook command, CancellationToken cancellationToken) => await mediator.Send(command, cancellationToken))
+.WithName("DeleteBook")
+.WithOpenApi();
+
 app.MapGet("/books", async (IMediator mediator, CancellationToken cancellationToken) => await mediator.Send(new GetBooks { }, cancellationToken))
 .WithName("GetBooks")
 .WithOpenApi();
+
 
 await app.RunAsync();
