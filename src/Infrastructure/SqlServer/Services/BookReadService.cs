@@ -28,14 +28,23 @@ internal sealed class BookReadService : IBookReadService
         var result = new List<Book>();
 
         using var dataReader = await command.ExecuteReaderAsync();
-        
+
         while (await dataReader.ReadAsync())
         {
             var bookId = dataReader.GetGuid(dataReader.GetOrdinal("BookId"));
             var title = dataReader.GetString(dataReader.GetOrdinal("Title"));
-            var authors = dataReader.GetString(dataReader.GetOrdinal("Authors"));
-            var publisher = dataReader.GetString(dataReader.GetOrdinal("Publisher"));
-            var isbn = dataReader.GetString(dataReader.GetOrdinal("Isbn"));
+
+            var authors = dataReader.IsDBNull(dataReader.GetOrdinal("Authors"))
+                ? string.Empty
+                : dataReader.GetString(dataReader.GetOrdinal("Authors"));
+
+            var publisher = dataReader.IsDBNull(dataReader.GetOrdinal("Publisher"))
+                ? string.Empty
+                : dataReader.GetString(dataReader.GetOrdinal("Publisher"));
+
+            var isbn = dataReader.IsDBNull(dataReader.GetOrdinal("Isbn"))
+                ? string.Empty
+                : dataReader.GetString(dataReader.GetOrdinal("Isbn"));
 
             var book = new Book
             {

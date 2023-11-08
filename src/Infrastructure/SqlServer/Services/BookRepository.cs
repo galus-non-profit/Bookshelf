@@ -25,7 +25,7 @@ internal sealed class BookRepository : IBookRepository
         command.CommandText =
             "INSERT INTO dbo.Book (BookId, Title, Authors, Publisher, Isbn) VALUES (@BookId, @Title, @Authors, @Publisher, @Isbn);";
         
-        command.Parameters.Add("@BookId", SqlDbType.UniqueIdentifier).Value = entity.Id;
+        command.Parameters.Add("@BookId", SqlDbType.UniqueIdentifier).Value = entity.Id.Value;
         
         command.Parameters.Add("@Title", SqlDbType.NVarChar, entity.Title.Length).Value = entity.Title;
         
