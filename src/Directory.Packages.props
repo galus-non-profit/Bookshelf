@@ -4,5 +4,6 @@
     <TargetFramework>net8.0</TargetFramework>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
     <ProductName>Bookshelf</ProductName>
+	<InvariantGlobalization>true</InvariantGlobalization>
   </PropertyGroup>
 </Project>
