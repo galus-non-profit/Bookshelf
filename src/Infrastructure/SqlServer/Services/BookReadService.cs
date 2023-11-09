@@ -1,28 +1,62 @@
 namespace Bookshelf.Infrastructure.SqlServer.Services;
 
-using Bookshelf.Infrastructure.SqlServer.Interfaces;
-using Entity = Bookshelf.Domain.Entities.Book;
-using ViewModel = Bookshelf.Application.ViewModels.Book;
+using System.Data;
+using Bookshelf.Infrastructure.Interfaces;
+using Bookshelf.Application.ViewModels;
+using Microsoft.Data.SqlClient;
 
 internal sealed class BookReadService : IBookReadService
 {
-    private readonly IDictionary<Guid, Entity> dictionary;
+    private readonly string connectionString;
+    private const string QUERY = "SELECT * FROM dbo.Book";
 
-    public BookReadService(IDictionary<Guid, Entity> dictionary)
-        => this.dictionary = dictionary;
+    public BookReadService(string connectionString)
+        => this.connectionString = connectionString;
 
-    public async Task<IReadOnlyList<ViewModel>> GetAllBooks(CancellationToken cancellationToken = default)
+    public async Task<IReadOnlyList<Book>> GetAllBooks(CancellationToken cancellationToken = default)
     {
-        var result = dictionary.Values
-        .Select(book => new ViewModel
+        using var connection = new SqlConnection(connectionString);
+        await connection.OpenAsync(cancellationToken);
+
+        using var command = connection.CreateCommand();
+        command.CommandType = CommandType.Text;
+        command.CommandText = QUERY;
+
+        var result = new List<Book>();
+
+        using var dataReader = await command.ExecuteReaderAsync(cancellationToken);
+
+        while (await dataReader.ReadAsync(cancellationToken))
         {
-            Id = book.Id.Value,
-            Authors = book.Authors ?? string.Empty,
-            ISBN = book.ISBN?.Value ?? string.Empty,
-            Publisher = book.Publisher ?? string.Empty,
-            Title = book.Title ?? string.Empty,
-        })
-        .ToList().AsReadOnly();
+            var bookId = dataReader.GetGuid(dataReader.GetOrdinal("BookId"));
+
+            var title = dataReader.IsDBNull(dataReader.GetOrdinal("Title"))
+                ? string.Empty
+                : dataReader.GetString(dataReader.GetOrdinal("Title"));
+
+            var authors = dataReader.IsDBNull(dataReader.GetOrdinal("Authors"))
+                ? string.Empty
+                : dataReader.GetString(dataReader.GetOrdinal("Authors"));
+
+            var publisher = dataReader.IsDBNull(dataReader.GetOrdinal("Publisher"))
+                ? string.Empty
+                : dataReader.GetString(dataReader.GetOrdinal("Publisher"));
+
+            var isbn = dataReader.IsDBNull(dataReader.GetOrdinal("Isbn"))
+                ? string.Empty
+                : dataReader.GetString(dataReader.GetOrdinal("Isbn"));
+
+            var book = new Book
+            {
+                Authors = authors,
+                Id = bookId,
+                ISBN = isbn,
+                Publisher = publisher,
+                Title = title,
+            };
+
+            result.Add(book);
+        }
 
         return await Task.FromResult(result);
     }

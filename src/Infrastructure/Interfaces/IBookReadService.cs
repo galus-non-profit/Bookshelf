@@ -1,4 +1,4 @@
-namespace Bookshelf.Infrastructure.SqlServer.Interfaces;
+namespace Bookshelf.Infrastructure.Interfaces;
 
 using Bookshelf.Application.ViewModels;
 

@@ -20,8 +20,9 @@ internal sealed class AddBookHandler : IRequestHandler<AddBook>
         var id = new BookId(request.Id);
         var book = new Book(id, request.Title, request.Authors, request.Publisher, request.Isbn);
 
-        this.logger.LogInformation("Add {BookId} to repository", request.Id);
+        this.logger.LogInformation("Adding {BookId} to repository", request.Id);
         await this.repository.CreateAsync(book, cancellationToken);
+        this.logger.LogInformation("Added {BookId} to repository", request.Id);
 
         var @event = new BookAdded
         {
