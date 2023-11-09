@@ -3,7 +3,6 @@
 using Bookshelf.Application.Commands;
 using Bookshelf.Application.Events;
 using Bookshelf.Application.Exceptons;
-using Bookshelf.Domain.Entities;
 using Bookshelf.Domain.Interfaces;
 using Bookshelf.Domain.Types;
 
@@ -28,12 +27,32 @@ internal sealed class UpdateBookHandler : IRequestHandler<UpdateBook>
         }
 
         book.SetTitle(request.Title);
-        book.SetAuthors(request.Authors);
-        book.SetPublisher(request.Publisher);
 
-        var isbn = new ISBN(request.Isbn);
-        book.SetIsbn(isbn);
+        if (string.IsNullOrWhiteSpace(request.Authors) is false)
+        {
+            book.SetAuthors(request.Authors);
+        }
 
+        if (string.IsNullOrWhiteSpace(request.Publisher) is false)
+        {
+            book.SetPublisher(request.Publisher);
+        }
+
+        if (string.IsNullOrWhiteSpace(request.Isbn) is false)
+        {
+            var isbn = new ISBN(request.Isbn);
+            book.SetIsbn(isbn);
+        }
+
+        this.logger.LogInformation("Updating {BookId} in repository", request.Id);
         await repository.UpdateAsync(book, cancellationToken);
+        this.logger.LogInformation("Updated {BookId} in repository", request.Id);
+
+        var @event = new BookUpdated
+        {
+            Id = id,
+        };
+
+        await this.mediator.Publish(@event, cancellationToken);
     }
 }

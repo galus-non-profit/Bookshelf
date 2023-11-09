@@ -1,17 +1,14 @@
-using Bookshelf.Domain.Types;
-using FluentValidation;
-
 namespace Bookshelf.Infrastructure.SqlServer.Services;
 
 using System.Data;
-using Microsoft.Data.SqlClient;
-using Bookshelf.Infrastructure.SqlServer.Interfaces;
+using Bookshelf.Infrastructure.Interfaces;
 using Bookshelf.Application.ViewModels;
+using Microsoft.Data.SqlClient;
 
 internal sealed class BookReadService : IBookReadService
 {
     private readonly string connectionString;
-    private const string QUERY = "Select * from dbo.Book";
+    private const string QUERY = "SELECT * FROM dbo.Book";
 
     public BookReadService(string connectionString)
         => this.connectionString = connectionString;
@@ -19,7 +16,7 @@ internal sealed class BookReadService : IBookReadService
     public async Task<IReadOnlyList<Book>> GetAllBooks(CancellationToken cancellationToken = default)
     {
         using var connection = new SqlConnection(connectionString);
-        await connection.OpenAsync();
+        await connection.OpenAsync(cancellationToken);
 
         using var command = connection.CreateCommand();
         command.CommandType = CommandType.Text;
@@ -27,12 +24,15 @@ internal sealed class BookReadService : IBookReadService
 
         var result = new List<Book>();
 
-        using var dataReader = await command.ExecuteReaderAsync();
+        using var dataReader = await command.ExecuteReaderAsync(cancellationToken);
 
-        while (await dataReader.ReadAsync())
+        while (await dataReader.ReadAsync(cancellationToken))
         {
             var bookId = dataReader.GetGuid(dataReader.GetOrdinal("BookId"));
-            var title = dataReader.GetString(dataReader.GetOrdinal("Title"));
+
+            var title = dataReader.IsDBNull(dataReader.GetOrdinal("Title"))
+                ? string.Empty
+                : dataReader.GetString(dataReader.GetOrdinal("Title"));
 
             var authors = dataReader.IsDBNull(dataReader.GetOrdinal("Authors"))
                 ? string.Empty
@@ -48,10 +48,10 @@ internal sealed class BookReadService : IBookReadService
 
             var book = new Book
             {
-                Authors = authors, 
-                Id = bookId, 
-                ISBN = isbn, 
-                Publisher = publisher, 
+                Authors = authors,
+                Id = bookId,
+                ISBN = isbn,
+                Publisher = publisher,
                 Title = title,
             };
 

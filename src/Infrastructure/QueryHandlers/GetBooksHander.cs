@@ -2,7 +2,7 @@ namespace Bookshelf.Infrastructure.SqlServer.QueryHandlers;
 
 using Bookshelf.Application.Queries;
 using Bookshelf.Application.ViewModels;
-using Bookshelf.Infrastructure.SqlServer.Interfaces;
+using Bookshelf.Infrastructure.Interfaces;
 
 internal sealed class GetBooksHandler : IRequestHandler<GetBooks, IReadOnlyList<Book>>
 {
