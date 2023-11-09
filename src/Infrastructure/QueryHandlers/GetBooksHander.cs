@@ -1,4 +1,4 @@
-namespace Bookshelf.Infrastructure.SqlServer.QueryHandlers;
+namespace Bookshelf.Infrastructure.QueryHandlers;
 
 using Bookshelf.Application.Queries;
 using Bookshelf.Application.ViewModels;
