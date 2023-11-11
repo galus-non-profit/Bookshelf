@@ -5,6 +5,7 @@ using Bookshelf.Application.Events;
 using Bookshelf.Application.Exceptons;
 using Bookshelf.Domain.Interfaces;
 using Bookshelf.Domain.Types;
+using Microsoft.Extensions.DependencyInjection;
 
 internal sealed class UpdateBookHandler : IRequestHandler<UpdateBook>
 {
@@ -12,7 +13,7 @@ internal sealed class UpdateBookHandler : IRequestHandler<UpdateBook>
     private readonly IPublisher mediator;
     private readonly IBookRepository repository;
 
-    public UpdateBookHandler(ILogger<UpdateBookHandler> logger, IPublisher mediator, IBookRepository repository)
+    public UpdateBookHandler(ILogger<UpdateBookHandler> logger, IPublisher mediator, [FromKeyedServices("SQLServer")] IBookRepository repository)
         => (this.logger, this.mediator, this.repository) = (logger, mediator, repository);
 
     public async Task Handle(UpdateBook request, CancellationToken cancellationToken)
