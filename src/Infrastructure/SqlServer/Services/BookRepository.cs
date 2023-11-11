@@ -1,22 +1,23 @@
 namespace Bookshelf.Infrastructure.SqlServer.Services;
 
 using System.Data;
-using System.IO;
 using Bookshelf.Domain.Entities;
 using Bookshelf.Domain.Interfaces;
 using Bookshelf.Domain.Types;
 using Microsoft.Data.SqlClient;
+using Microsoft.Extensions.DependencyInjection;
 
 internal sealed class BookRepository : IBookRepository
 {
-    private readonly string connectionString;
+    private readonly ILogger<BookRepository> logger;
+    private readonly SqlServerOptions options;
 
-    public BookRepository(string connectionString)
-        => this.connectionString = connectionString;
+    public BookRepository(ILogger<BookRepository> logger, [FromKeyedServices("SQLServer")] SqlServerOptions options)
+        => (this.logger, this.options) = (logger, options);
 
     public async Task CreateAsync(Book entity, CancellationToken cancellationToken = default)
     {
-        await using var connection = new SqlConnection(this.connectionString);
+        await using var connection = new SqlConnection(this.options.ConnectionString);
         await connection.OpenAsync(cancellationToken);
 
         await using var command = connection.CreateCommand();
@@ -66,7 +67,7 @@ internal sealed class BookRepository : IBookRepository
 
     public async Task DeleteAsync(BookId id, CancellationToken cancellationToken = default)
     {
-        await using var connection = new SqlConnection(this.connectionString);
+        await using var connection = new SqlConnection(this.options.ConnectionString);
         await connection.OpenAsync(cancellationToken);
 
         await using var command = connection.CreateCommand();
@@ -80,7 +81,7 @@ internal sealed class BookRepository : IBookRepository
 
     public async Task<Book?> ReadAsync(BookId id, CancellationToken cancellationToken = default)
     {
-        await using var connection = new SqlConnection(this.connectionString);
+        await using var connection = new SqlConnection(this.options.ConnectionString);
         await connection.OpenAsync(cancellationToken);
 
         await using var command = connection.CreateCommand();
@@ -119,7 +120,7 @@ internal sealed class BookRepository : IBookRepository
 
     public async Task UpdateAsync(Book entity, CancellationToken cancellationToken = default)
     {
-        await using var connection = new SqlConnection(this.connectionString);
+        await using var connection = new SqlConnection(this.options.ConnectionString);
         await connection.OpenAsync(cancellationToken);
 
         await using var command = connection.CreateCommand();

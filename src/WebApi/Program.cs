@@ -2,7 +2,6 @@ using Bookshelf.Application;
 using Bookshelf.Application.Commands;
 using Bookshelf.Application.Queries;
 using Bookshelf.Infrastructure;
-using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -28,10 +27,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// app.MapGet("/weatherforecast", async (IMediator mediator, [FromQuery] int count = 5) => await mediator.Send(new GetWeatherForecasts { Count = count, }))
-// .WithName("GetWeatherForecast")
-// .WithOpenApi();
-
 app.MapPost("/weatherforecast", async ([FromServices] ISender mediator, [FromBody] GetWeatherForecasts query, CancellationToken cancellationToken) => await mediator.Send(query, cancellationToken))
 .WithName("GetWeatherForecast")
 .WithOpenApi();
@@ -51,6 +46,5 @@ app.MapDelete("/books", async ([FromServices] ISender mediator, [FromBody] Delet
 app.MapGet("/books", async (IMediator mediator, CancellationToken cancellationToken) => await mediator.Send(new GetBooks { }, cancellationToken))
 .WithName("GetBooks")
 .WithOpenApi();
-
 
 await app.RunAsync();
