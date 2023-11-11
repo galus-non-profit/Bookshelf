@@ -4,7 +4,6 @@ using System.Data;
 using Bookshelf.Infrastructure.Interfaces;
 using Bookshelf.Application.ViewModels;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.DependencyInjection;
 
 internal sealed class BookReadService : IBookReadService
 {
@@ -13,7 +12,7 @@ internal sealed class BookReadService : IBookReadService
     private readonly ILogger<BookReadService> logger;
     private readonly SqlServerOptions options;
 
-    public BookReadService(ILogger<BookReadService> logger, [FromKeyedServices("SQLServer")] SqlServerOptions options)
+    public BookReadService(ILogger<BookReadService> logger, SqlServerOptions options)
         => (this.logger, this.options) = (logger, options);
 
     public async Task<IReadOnlyList<Book>> GetAllBooks(CancellationToken cancellationToken = default)

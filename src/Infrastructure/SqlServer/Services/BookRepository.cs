@@ -5,14 +5,13 @@ using Bookshelf.Domain.Entities;
 using Bookshelf.Domain.Interfaces;
 using Bookshelf.Domain.Types;
 using Microsoft.Data.SqlClient;
-using Microsoft.Extensions.DependencyInjection;
 
 internal sealed class BookRepository : IBookRepository
 {
     private readonly ILogger<BookRepository> logger;
     private readonly SqlServerOptions options;
 
-    public BookRepository(ILogger<BookRepository> logger, [FromKeyedServices("SQLServer")] SqlServerOptions options)
+    public BookRepository(ILogger<BookRepository> logger, SqlServerOptions options)
         => (this.logger, this.options) = (logger, options);
 
     public async Task CreateAsync(Book entity, CancellationToken cancellationToken = default)
