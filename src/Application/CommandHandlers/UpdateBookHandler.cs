@@ -41,7 +41,7 @@ internal sealed class UpdateBookHandler : IRequestHandler<UpdateBook>
 
         if (string.IsNullOrWhiteSpace(request.Isbn) is false)
         {
-            var isbn = new ISBN(request.Isbn);
+            var isbn = new ISBN(request.Isbn!);
             book.SetIsbn(isbn);
         }
 

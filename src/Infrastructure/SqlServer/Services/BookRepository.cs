@@ -25,40 +25,41 @@ internal sealed class BookRepository : IBookRepository
 
         command.Parameters.Add("@BookId", SqlDbType.UniqueIdentifier).Value = entity.Id.Value;
 
-        if (string.IsNullOrEmpty(entity.Title) is false)
-        {
-            command.Parameters.Add("@Title", SqlDbType.NVarChar, entity.Title.Length).Value = entity.Title;
-        }
-        else
+        if (string.IsNullOrEmpty(entity.Title))
         {
             command.Parameters.Add("@Title", SqlDbType.NVarChar).Value = DBNull.Value;
         }
-
-        if (string.IsNullOrEmpty(entity.Authors) is false)
-        {
-            command.Parameters.Add("@Authors", SqlDbType.NVarChar, entity.Authors.Length).Value = entity.Authors;
-        }
         else
+        {
+            command.Parameters.Add("@Title", SqlDbType.NVarChar, entity.Title.Length).Value = entity.Title;
+        }
+
+        if (string.IsNullOrEmpty(entity.Authors))
         {
             command.Parameters.Add("@Authors", SqlDbType.NVarChar).Value = DBNull.Value;
         }
-
-        if (string.IsNullOrEmpty(entity.Publisher) is false)
-        {
-            command.Parameters.Add("@Publisher", SqlDbType.NVarChar, entity.Publisher.Length).Value = entity.Publisher;
-        }
         else
+        {
+            command.Parameters.Add("@Authors", SqlDbType.NVarChar, entity.Authors.Length).Value = entity.Authors;
+        }
+
+        if (string.IsNullOrEmpty(entity.Publisher))
         {
             command.Parameters.Add("@Publisher", SqlDbType.NVarChar).Value = DBNull.Value;
         }
-
-        if (entity.ISBN is not null)
+        else
         {
-            command.Parameters.Add("@Isbn", SqlDbType.NVarChar, entity.ISBN?.Value.Length ?? 0).Value = entity.Authors;
+            command.Parameters.Add("@Publisher", SqlDbType.NVarChar, entity.Publisher.Length).Value = entity.Publisher;
+        }
+
+        if (entity.ISBN is null)
+        {
+            command.Parameters.Add("@Isbn", SqlDbType.NVarChar).Value = DBNull.Value;
         }
         else
         {
-            command.Parameters.Add("@Isbn", SqlDbType.NVarChar).Value = DBNull.Value;
+            string value = $"{entity.ISBN?.Value ?? string.Empty}";
+            command.Parameters.Add("@Isbn", SqlDbType.VarChar, value.Length).Value = value;
         }
 
         _ = await command.ExecuteNonQueryAsync(cancellationToken);
@@ -128,40 +129,41 @@ internal sealed class BookRepository : IBookRepository
 
         command.Parameters.Add("@BookId", SqlDbType.UniqueIdentifier).Value = entity.Id.Value;
 
-        if (string.IsNullOrEmpty(entity.Title) is false)
-        {
-            command.Parameters.Add("@Title", SqlDbType.NVarChar, entity.Title.Length).Value = entity.Title;
-        }
-        else
+        if (string.IsNullOrEmpty(entity.Title))
         {
             command.Parameters.Add("@Title", SqlDbType.NVarChar).Value = DBNull.Value;
         }
-
-        if (string.IsNullOrEmpty(entity.Authors) is false)
-        {
-            command.Parameters.Add("@Authors", SqlDbType.NVarChar, entity.Authors.Length).Value = entity.Authors;
-        }
         else
+        {
+            command.Parameters.Add("@Title", SqlDbType.NVarChar, entity.Title.Length).Value = entity.Title;
+        }
+
+        if (string.IsNullOrEmpty(entity.Authors))
         {
             command.Parameters.Add("@Authors", SqlDbType.NVarChar).Value = DBNull.Value;
         }
-
-        if (string.IsNullOrEmpty(entity.Publisher) is false)
-        {
-            command.Parameters.Add("@Publisher", SqlDbType.NVarChar, entity.Publisher.Length).Value = entity.Publisher;
-        }
         else
+        {
+            command.Parameters.Add("@Authors", SqlDbType.NVarChar, entity.Authors.Length).Value = entity.Authors;
+        }
+
+        if (string.IsNullOrEmpty(entity.Publisher))
         {
             command.Parameters.Add("@Publisher", SqlDbType.NVarChar).Value = DBNull.Value;
         }
-
-        if (entity.ISBN is not null)
+        else
         {
-            command.Parameters.Add("@Isbn", SqlDbType.NVarChar, entity.ISBN?.Value.Length ?? 0).Value = entity.Authors;
+            command.Parameters.Add("@Publisher", SqlDbType.NVarChar, entity.Publisher.Length).Value = entity.Publisher;
+        }
+
+        if (entity.ISBN is null)
+        {
+            command.Parameters.Add("@Isbn", SqlDbType.VarChar).Value = DBNull.Value;
         }
         else
         {
-            command.Parameters.Add("@Isbn", SqlDbType.NVarChar).Value = DBNull.Value;
+            string value = $"{entity.ISBN?.Value ?? string.Empty}";
+            command.Parameters.Add("@Isbn", SqlDbType.VarChar, value.Length).Value = value;
         }
 
         _ = await command.ExecuteNonQueryAsync(cancellationToken);

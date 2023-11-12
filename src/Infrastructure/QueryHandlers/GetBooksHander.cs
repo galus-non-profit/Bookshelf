@@ -9,7 +9,7 @@ internal sealed class GetBooksHandler : IRequestHandler<GetBooks, IReadOnlyList<
 {
     private readonly IBookReadService readService;
 
-    public GetBooksHandler([FromKeyedServices("SQLServer")] IBookReadService readService)
+    public GetBooksHandler([FromKeyedServices("Dapper")] IBookReadService readService)
         => this.readService = readService;
 
     public async Task<IReadOnlyList<Book>> Handle(GetBooks request, CancellationToken cancellationToken)

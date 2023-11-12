@@ -1,0 +1,31 @@
+networks:
+  bookshelf-network:
+    driver: bridge
+    name: bookshelf-network
+
+volumes:
+  mssql-server-storage:
+    driver: local
+    name: bookshelf-mssql-server-storage
+
+services:
+  mssql-server:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: bookshelf-mssql-server
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=P@ssw0rd
+      - MSSQL_PID=Express
+    ports:
+      - 1433:1433
+    networks:
+      - bookshelf-network
+    volumes:
+      - mssql-server-storage:/var/opt/mssql
+    restart: always
+    healthcheck:
+      test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P "$$SA_PASSWORD" -Q "SELECT 1" || exit 1"
+      interval: 10s
+      retries: 10
+      start_period: 10s
+      timeout: 3s
