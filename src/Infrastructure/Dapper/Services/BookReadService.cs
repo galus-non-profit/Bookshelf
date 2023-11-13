@@ -19,7 +19,7 @@ internal sealed class BookReadService : IBookReadService
 
     public async Task<IReadOnlyList<Book>> GetAllBooks(CancellationToken cancellationToken = default)
     {
-        var connection = new SqlConnection(this.options.ConnectionString);
+        using var connection = new SqlConnection(this.options.ConnectionString);
         await connection.OpenAsync(cancellationToken);
 
         var result = await connection.QueryAsync<Book>(QUERY, commandType: CommandType.Text);

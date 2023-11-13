@@ -17,7 +17,7 @@ internal sealed class BookRepository : IBookRepository
 
     public async Task CreateAsync(Book entity, CancellationToken cancellationToken = default)
     {
-        var connection = new SqlConnection(this.options.ConnectionString);
+        using var connection = new SqlConnection(this.options.ConnectionString);
         await connection.OpenAsync(cancellationToken);
 
         var query = "INSERT INTO [dbo].[Book](BookId, Title, Authors, Publisher, Isbn) VALUES (@BookId, @Title, @Authors, @Publisher, @Isbn);";
@@ -34,7 +34,7 @@ internal sealed class BookRepository : IBookRepository
 
     public async Task DeleteAsync(BookId id, CancellationToken cancellationToken = default)
     {
-        var connection = new SqlConnection(this.options.ConnectionString);
+        using var connection = new SqlConnection(this.options.ConnectionString);
         await connection.OpenAsync(cancellationToken);
 
         var query = "DELETE FROM [dbo].[Book] WHERE [BookId] = @BookId";
@@ -47,7 +47,7 @@ internal sealed class BookRepository : IBookRepository
 
     public async Task<Book?> ReadAsync(BookId id, CancellationToken cancellationToken = default)
     {
-        var connection = new SqlConnection(this.options.ConnectionString);
+        using var connection = new SqlConnection(this.options.ConnectionString);
         await connection.OpenAsync(cancellationToken);
         var query = "SELECT * FROM [dbo].[Book] WHERE [BookId] = @BookId";
 
@@ -59,7 +59,7 @@ internal sealed class BookRepository : IBookRepository
 
     public async Task UpdateAsync(Book entity, CancellationToken cancellationToken = default)
     {
-        var connection = new SqlConnection(this.options.ConnectionString);
+        using var connection = new SqlConnection(this.options.ConnectionString);
         await connection.OpenAsync(cancellationToken);
 
         var query = "UPDATE [dbo].[Book] SET Title=@Title, Authors=@Authors, Publisher=@Publisher, Isbn=@Isbn WHERE [BookId] = @BookId";

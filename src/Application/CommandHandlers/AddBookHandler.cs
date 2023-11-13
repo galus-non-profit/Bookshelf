@@ -13,7 +13,7 @@ internal sealed class AddBookHandler : IRequestHandler<AddBook>
     private readonly IPublisher mediator;
     private readonly IBookRepository repository;
 
-    public AddBookHandler(ILogger<AddBookHandler> logger, IPublisher mediator, [FromKeyedServices("SQLServer")] IBookRepository repository)
+    public AddBookHandler(ILogger<AddBookHandler> logger, IPublisher mediator, [FromKeyedServices("Dapper")] IBookRepository repository)
         => (this.logger, this.mediator, this.repository) = (logger, mediator, repository);
 
     public async Task Handle(AddBook request, CancellationToken cancellationToken)
