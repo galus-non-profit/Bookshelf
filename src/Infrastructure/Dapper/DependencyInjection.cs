@@ -1,8 +1,8 @@
 namespace Bookshelf.Infrastructure.Dapper;
 
 using Bookshelf.Domain.Interfaces;
+using Bookshelf.Infrastructure.Dapper.Services;
 using Bookshelf.Infrastructure.Interfaces;
-using Bookshelf.Infrastructure.SqlServer.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
